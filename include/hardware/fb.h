@@ -63,15 +63,11 @@ typedef struct framebuffer_device_t {
 
     /* max swap interval supported by this framebuffer */
     const int       maxSwapInterval;
+    
+    const int       smem_start;
+    const int       vmem_start;
 
-#ifdef QCOM_HARDWARE
-    /* number of framebuffers */
-    const int       numFramebuffers;
-
-    int reserved[7];
-#else
     int reserved[8];
-#endif
 
     /*
      * requests a specific swap-interval (same definition than EGL)
@@ -133,10 +129,6 @@ typedef struct framebuffer_device_t {
 
     int (*compositionComplete)(struct framebuffer_device_t* dev);
 
-#ifdef QCOM_HARDWARE
-    int (*lockBuffer) (struct framebuffer_device_t* dev, int);
-#endif
-
     /*
      * This hook is OPTIONAL.
      *
@@ -152,20 +144,7 @@ typedef struct framebuffer_device_t {
      */
     int (*enableScreen)(struct framebuffer_device_t* dev, int enable);
 
-#ifdef QCOM_HARDWARE
-    int (*dequeueBuffer) (struct framebuffer_device_t* dev, int);
-
-    /*
-     * (*perform)() is used to inform custom event to fb device
-     * event - Type of event
-     * val1 - associated with event
-     * val2 - additional value(if any) associated with event
-     */
-    int (*perform) (struct framebuffer_device_t* dev, int event, int value);
-
-#else
     void* reserved_proc[6];
-#endif
 
 } framebuffer_device_t;
 
